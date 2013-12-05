@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DataNucleus Google Guava
+Bundle-SymbolicName: org.datanucleus.store.types.guava;singleton:=true
+Bundle-Vendor: DataNucleus
+Bundle-Version: 3.2.3
+Bundle-Localization: plugin
+Require-Bundle: org.datanucleus;bundle-version="3.2.5"
+Import-Package: com.google.common.base;version="10.0.0",
+ com.google.common.collect;version="10.0.0",
+ javax.jdo;version="3.0.0",
+ javax.jdo.spi;version="3.0.0"
