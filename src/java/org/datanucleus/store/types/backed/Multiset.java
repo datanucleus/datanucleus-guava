@@ -241,7 +241,6 @@ public class Multiset<E> extends org.datanucleus.store.types.simple.Multiset<E> 
     /* (non-Javadoc)
      * @see org.datanucleus.store.types.backed.BackedSCO#getBackingStore()
      */
-    @Override
     public Store getBackingStore()
     {
         return backingStore;
