@@ -23,7 +23,6 @@
     </scm>
 
     <properties>
-        <jdo.version>3.0</jdo.version>
         <dn.core.version>3.2.5</dn.core.version>
     </properties>
 
@@ -36,7 +35,6 @@
                     <instructions>
                         <Bundle-SymbolicName>org.datanucleus.store.types.guava;singleton:=true</Bundle-SymbolicName>
                         <Import-Package>
-                            javax.jdo*;version="${jdo.version}",
                             org.datanucleus*;version="${dn.core.version}",
                             *;resolution:=optional
                         </Import-Package>
@@ -51,12 +49,6 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-core</artifactId>
             <version>[${dn.core.version}, )</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.jdo</groupId>
-            <artifactId>jdo-api</artifactId>
-            <version>[${jdo.version}, )</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
