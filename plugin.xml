@@ -26,8 +26,8 @@ Contributors:
             wrapper-type-backed="org.datanucleus.store.types.backed.Multiset"/>
     </extension>
 
-    <!-- JAVA TYPES MAPPING, for "mapped" datastores -->
-    <extension point="org.datanucleus.store_mapping">
+    <!-- RDBMS : JAVA TYPES MAPPING -->
+    <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping java-type="com.google.common.collect.Multiset" 
             mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
         <mapping java-type="org.datanucleus.store.types.backed.Multiset"
