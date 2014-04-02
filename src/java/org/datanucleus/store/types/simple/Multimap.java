@@ -401,7 +401,7 @@ public class Multimap<K, V> extends ForwardingMultimap<K, V> implements SCOMap, 
      * resolved will result in an object of a type that is compatible with all
      * references to the object.
      * @return the replaced object
-     * @throws ObjectStreamException
+     * @throws ObjectStreamException if an error occurs
      */
     protected Object writeReplace() throws ObjectStreamException
     {
