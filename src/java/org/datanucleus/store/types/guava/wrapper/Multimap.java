@@ -15,7 +15,7 @@ limitations under the License.
 Contributors:
     ...
 **********************************************************************/
-package org.datanucleus.store.types.simple;
+package org.datanucleus.store.types.guava.wrapper;
 
 import java.io.ObjectStreamException;
 import java.util.Collection;
