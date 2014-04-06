@@ -37,6 +37,7 @@ import org.datanucleus.store.scostore.CollectionStore;
 import org.datanucleus.store.scostore.Store;
 import org.datanucleus.store.types.SCOCollectionIterator;
 import org.datanucleus.store.types.SCOUtils;
+import org.datanucleus.store.types.wrapper.backed.BackedSCO;
 import org.datanucleus.util.NucleusLogger;
 
 import com.google.common.collect.HashMultiset;
