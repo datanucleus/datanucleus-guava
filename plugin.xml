@@ -17,20 +17,17 @@ limitations under the License.
 Contributors:
     ...
 **********************************************************************-->
-<plugin id="org.datanucleus.store.types.guava" name="DataNucleus Guava types" 
-    provider-name="DataNucleus">
+<plugin id="org.datanucleus.store.types.guava" name="DataNucleus Guava types" provider-name="DataNucleus">
+
     <!-- JAVA TYPES -->
     <extension point="org.datanucleus.java_type">
-        <java-type name="com.google.common.collect.Multiset"
-            wrapper-type="org.datanucleus.store.types.simple.Multiset"
-            wrapper-type-backed="org.datanucleus.store.types.backed.Multiset"/>
+        <java-type name="com.google.common.collect.Multiset" wrapper-type="org.datanucleus.store.types.guava.wrapper.Multiset"
+            wrapper-type-backed="org.datanucleus.store.types.guava.wrapper.backed.Multiset"/>
     </extension>
 
     <!-- RDBMS : JAVA TYPES MAPPING -->
     <extension point="org.datanucleus.store.rdbms.java_mapping">
-        <mapping java-type="com.google.common.collect.Multiset" 
-            mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
-        <mapping java-type="org.datanucleus.store.types.backed.Multiset"
-            mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
+        <mapping java-type="com.google.common.collect.Multiset" mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
+        <mapping java-type="org.datanucleus.store.types.backed.Multiset" mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
     </extension>
 </plugin>
