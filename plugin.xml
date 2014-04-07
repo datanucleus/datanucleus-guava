@@ -21,8 +21,8 @@ Contributors:
 
     <!-- JAVA TYPES -->
     <extension point="org.datanucleus.java_type">
-        <java-type name="com.google.common.collect.Multiset" wrapper-type="org.datanucleus.store.types.guava.wrapper.Multiset"
-            wrapper-type-backed="org.datanucleus.store.types.guava.wrapper.backed.Multiset"/>
+        <java-type name="com.google.common.collect.Multiset" wrapper-type="org.datanucleus.store.types.guava.wrappers.Multiset"
+            wrapper-type-backed="org.datanucleus.store.types.guava.wrappers.backed.Multiset"/>
     </extension>
 
     <!-- RDBMS : JAVA TYPES MAPPING -->

@@ -15,7 +15,7 @@ limitations under the License.
 Contributors:
     ...
 **********************************************************************/
-package org.datanucleus.store.types.guava.wrapper.backed;
+package org.datanucleus.store.types.guava.wrappers.backed;
 
 import java.io.ObjectStreamException;
 import java.util.Collection;
@@ -37,7 +37,7 @@ import org.datanucleus.store.scostore.CollectionStore;
 import org.datanucleus.store.scostore.Store;
 import org.datanucleus.store.types.SCOCollectionIterator;
 import org.datanucleus.store.types.SCOUtils;
-import org.datanucleus.store.types.wrapper.backed.BackedSCO;
+import org.datanucleus.store.types.wrappers.backed.BackedSCO;
 import org.datanucleus.util.NucleusLogger;
 
 import com.google.common.collect.HashMultiset;
@@ -63,7 +63,7 @@ import com.google.common.collect.HashMultiset;
  * "backing store" (where present) and does this as necessary. Some methods (<B>size()</B>) just check if 
  * everything is loaded and use the delegate if possible, otherwise going direct to the datastore.
  */
-public class Multiset<E> extends org.datanucleus.store.types.guava.wrapper.Multiset<E> implements BackedSCO
+public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Multiset<E> implements BackedSCO
 {
     protected transient CollectionStore backingStore;
     protected transient boolean allowNulls = false;
