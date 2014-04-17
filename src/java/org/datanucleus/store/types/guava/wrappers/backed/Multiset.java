@@ -127,7 +127,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     ObjectProvider objSM = ec.findObjectProvider(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.newObjectProviderForEmbedded(pc, false, ownerOP, ownerMmd.getAbsoluteFieldNumber());
+                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerOP, ownerMmd.getAbsoluteFieldNumber());
                     }
                 }
             }
