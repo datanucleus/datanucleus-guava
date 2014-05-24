@@ -40,7 +40,7 @@ import com.google.common.collect.HashMultiset;
  * This is the simplified form that intercepts mutators and marks the field as dirty.
  * Note that we cannot explicitly support HashMultiset etc since Google made these final.
  */
-public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection, SCOMtoN, Cloneable
+public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset>, SCOMtoN, Cloneable
 {
     protected transient ObjectProvider ownerOP;
     protected transient AbstractMemberMetaData ownerMmd;
@@ -61,13 +61,12 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection,
 
     /**
      * Method to initialise the SCO from an existing value.
-     * @param o The object to set from
+     * @param c The object to set from
      * @param forInsert Whether the object needs inserting in the datastore with this value
      * @param forUpdate Whether to update the datastore with this value
      */
-    public void initialise(Object o, boolean forInsert, boolean forUpdate)
+    public void initialise(com.google.common.collect.Multiset c, boolean forInsert, boolean forUpdate)
     {
-        Collection c = (Collection)o;
         delegate = HashMultiset.create();
         if (c != null)
         {
@@ -101,7 +100,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection,
      * Accessor for the unwrapped value that we are wrapping.
      * @return The unwrapped value
      */
-    public Object getValue()
+    public com.google.common.collect.Multiset getValue()
     {
         return delegate;
     }
@@ -183,9 +182,9 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection,
      * @param state State for detachment process
      * @return The detached container
      */
-    public Object detachCopy(FetchPlanState state)
+    public com.google.common.collect.Multiset detachCopy(FetchPlanState state)
     {
-        java.util.Collection detached = new java.util.HashSet();
+        com.google.common.collect.Multiset detached = HashMultiset.create();
         SCOUtils.detachCopyForCollection(ownerOP, toArray(), state, detached);
         return detached;
     }
@@ -197,11 +196,10 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection,
      * value are attached.
      * @param value The new (collection) value
      */
-    public void attachCopy(Object value)
+    public void attachCopy(com.google.common.collect.Multiset value)
     {
-        java.util.Collection c = (java.util.Collection) value;
         boolean elementsWithoutIdentity = SCOUtils.collectionHasElementsWithoutIdentity(ownerMmd);
-        SCOUtils.attachCopyElements(ownerOP, this, c, elementsWithoutIdentity);
+        SCOUtils.attachCopyElements(ownerOP, this, value, elementsWithoutIdentity);
 
 /*        // Remove any no-longer-needed elements from this collection
         SCOUtils.attachRemoveDeletedElements(ownerOP.getExecutionContext().getApiAdapter(), this, c, elementsWithoutIdentity);

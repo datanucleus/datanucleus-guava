@@ -108,13 +108,12 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
     /**
      * Method to initialise the SCO from an existing value.
-     * @param o The object to set from
+     * @param c The object to set from
      * @param forInsert Whether the object needs inserting in the datastore with this value
      * @param forUpdate Whether to update the datastore with this value
      */
-    public void initialise(Object o, boolean forInsert, boolean forUpdate)
+    public void initialise(com.google.common.collect.Multiset c, boolean forInsert, boolean forUpdate)
     {
-        Collection c = (Collection)o;
         if (c != null)
         {
             // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
@@ -189,7 +188,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * Accessor for the unwrapped value that we are wrapping.
      * @return The unwrapped value
      */
-    public Object getValue()
+    public com.google.common.collect.Multiset getValue()
     {
         loadFromStore();
         return super.getValue();
