@@ -597,7 +597,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * @param element The element
      * @return Whether it was removed ok.
      **/
-    public boolean remove(Object element)
+    public synchronized boolean remove(Object element)
     {
         return remove(element, true);
     }
@@ -607,7 +607,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * @param element The element
      * @param allowCascadeDelete Whether to allow cascade delete
      */
-    public boolean remove(Object element, boolean allowCascadeDelete)
+    public synchronized boolean remove(Object element, boolean allowCascadeDelete)
     {
         makeDirty();
 
@@ -712,10 +712,8 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             delegate.removeAll(c); // Remove from the delegate too
             return backingSuccess;
         }
-        else
-        {
-            return delegate.removeAll(c);
-        }
+
+        return delegate.removeAll(c);
     }
 
     /**
@@ -768,12 +766,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             multi.addAll(delegate);
             return multi;
         }
-        else
-        {
-            // TODO Cater for non-cached collection, load elements in a DB call.
-            HashMultiset multi = HashMultiset.create();
-            multi.addAll(delegate);
-            return multi;
-        }
+
+        // TODO Cater for non-cached collection, load elements in a DB call.
+        HashMultiset multi = HashMultiset.create();
+        multi.addAll(delegate);
+        return multi;
     }
 }

@@ -205,11 +205,11 @@ public class Multimap<K, V> extends ForwardingMultimap<K, V> implements SCOMap, 
             V val = entry.getValue();
             if (api.isPersistable(key))
             {
-                key = (K) ownerOP.getExecutionContext().detachObjectCopy(key, state);
+                key = ownerOP.getExecutionContext().detachObjectCopy(key, state);
             }
             if (api.isPersistable(val))
             {
-                val = (V) ownerOP.getExecutionContext().detachObjectCopy(val, state);
+                val = ownerOP.getExecutionContext().detachObjectCopy(val, state);
             }
             detached.put(key, val);
         }
@@ -242,11 +242,11 @@ public class Multimap<K, V> extends ForwardingMultimap<K, V> implements SCOMap, 
             V val = entry.getValue();
             if (api.isPersistable(key) && api.isDetachable(key))
             {
-                key = (K) ownerOP.getExecutionContext().attachObjectCopy(ownerOP, key, keysWithoutIdentity);
+                key = ownerOP.getExecutionContext().attachObjectCopy(ownerOP, key, keysWithoutIdentity);
             }
             if (api.isPersistable(val) && api.isDetachable(val))
             {
-                val = (V) ownerOP.getExecutionContext().attachObjectCopy(ownerOP, val, valuesWithoutIdentity);
+                val = ownerOP.getExecutionContext().attachObjectCopy(ownerOP, val, valuesWithoutIdentity);
             }
             attachedKeysValues.put(key, val);
         }
