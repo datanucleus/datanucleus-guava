@@ -27,7 +27,6 @@ import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.types.SCOCollection;
 import org.datanucleus.store.types.SCOCollectionIterator;
-import org.datanucleus.store.types.SCOMtoN;
 import org.datanucleus.store.types.SCOUtils;
 import org.datanucleus.util.Localiser;
 import org.datanucleus.util.NucleusLogger;
@@ -40,7 +39,7 @@ import com.google.common.collect.HashMultiset;
  * This is the simplified form that intercepts mutators and marks the field as dirty.
  * Note that we cannot explicitly support HashMultiset etc since Google made these final.
  */
-public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset>, SCOMtoN, Cloneable
+public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset>, Cloneable
 {
     protected transient ObjectProvider ownerOP;
     protected transient AbstractMemberMetaData ownerMmd;
