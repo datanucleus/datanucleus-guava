@@ -101,7 +101,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
                 NucleusLogger.PERSISTENCE.debug(SCOUtils.getContainerInfoMessage(op, ownerMmd.getName(), this,
-                    useCache, queued, allowNulls, SCOUtils.useCachedLazyLoading(op, ownerMmd)));
+                    useCache, allowNulls, SCOUtils.useCachedLazyLoading(op, ownerMmd)));
             }
         }
     }
@@ -489,7 +489,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(queued, ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerOP))
             {
                 addQueuedOperation(new CollectionAddOperation(ownerOP, backingStore, element));
             }
@@ -541,7 +541,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(queued, ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerOP))
             {
                 Iterator iter = c.iterator();
                 while (iter.hasNext())
@@ -580,7 +580,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(queued, ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerOP))
             {
                 addQueuedOperation(new CollectionClearOperation(ownerOP, backingStore));
             }
@@ -627,7 +627,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(queued, ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerOP))
             {
                 backingSuccess = contained;
                 if (backingSuccess)
@@ -682,7 +682,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             boolean backingSuccess = true;
             int size = (useCache ? delegate.size() : -1);
 
-            if (SCOUtils.useQueuedUpdate(queued, ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerOP))
             {
                 backingSuccess = false;
                 Iterator iter = c.iterator();
