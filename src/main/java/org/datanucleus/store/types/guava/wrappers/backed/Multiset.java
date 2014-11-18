@@ -70,7 +70,6 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
     protected transient boolean allowNulls = false;
     protected transient boolean useCache = true;
     protected transient boolean isCacheLoaded = false;
-    protected transient boolean queued = false;
 
     /**
      * Constructor, using the ObjectProvider of the "owner" and the field name.
@@ -88,15 +87,12 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         {
             ExecutionContext ec = op.getExecutionContext();
             allowNulls = SCOUtils.allowNullsInContainer(allowNulls, ownerMmd);
-            queued = ec.isDelayDatastoreOperationsEnabled();
             useCache = SCOUtils.useContainerCache(op, ownerMmd);
 
-            if (!SCOUtils.collectionHasSerialisedElements(ownerMmd) && 
-                    ownerMmd.getPersistenceModifier() == FieldPersistenceModifier.PERSISTENT)
+            if (!SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getPersistenceModifier() == FieldPersistenceModifier.PERSISTENT)
             {
                 ClassLoaderResolver clr = ec.getClassLoaderResolver();
-                this.backingStore = (CollectionStore)
-                    ((BackedSCOStoreManager)ec.getStoreManager()).getBackingStoreForField(clr, ownerMmd, java.util.HashSet.class);
+                this.backingStore = (CollectionStore)((BackedSCOStoreManager)ec.getStoreManager()).getBackingStoreForField(clr, ownerMmd, java.util.HashSet.class);
             }
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
