@@ -58,13 +58,25 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         this.ownerMmd = mmd;
     }
 
+    public void initialise(com.google.common.collect.Multiset newValue, Object oldValue)
+    {
+        delegate = HashMultiset.create();
+        if (newValue != null)
+        {
+            delegate.addAll(newValue); // Make copy of the elements rather than using same memory
+        }
+        if (NucleusLogger.PERSISTENCE.isDebugEnabled())
+        {
+            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
+                SCOUtils.getSCOWrapperOptionsMessage(true, false, true, false)));
+        }
+    }
+
     /**
      * Method to initialise the SCO from an existing value.
      * @param c The object to set from
-     * @param forInsert Whether the object needs inserting in the datastore with this value
-     * @param forUpdate Whether to update the datastore with this value
      */
-    public void initialise(com.google.common.collect.Multiset c, boolean forInsert, boolean forUpdate)
+    public void initialise(com.google.common.collect.Multiset c)
     {
         delegate = HashMultiset.create();
         if (c != null)

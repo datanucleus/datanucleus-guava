@@ -102,13 +102,46 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
     }
 
+    public void initialise(com.google.common.collect.Multiset newValue, Object oldValue)
+    {
+        if (newValue != null)
+        {
+            // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
+            if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
+            {
+                ExecutionContext ec = ownerOP.getExecutionContext();
+                Iterator iter = newValue.iterator();
+                while (iter.hasNext())
+                {
+                    Object pc = iter.next();
+                    ObjectProvider objSM = ec.findObjectProvider(pc);
+                    if (objSM == null)
+                    {
+                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerOP, ownerMmd.getAbsoluteFieldNumber());
+                    }
+                }
+            }
+
+            if (backingStore != null && useCache && !isCacheLoaded)
+            {
+                // Mark as loaded
+                isCacheLoaded = true;
+            }
+
+            if (NucleusLogger.PERSISTENCE.isDebugEnabled())
+            {
+                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023008", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + newValue.size()));
+            }
+            clear();
+            addAll(newValue);
+        }
+    }
+
     /**
      * Method to initialise the SCO from an existing value.
      * @param c The object to set from
-     * @param forInsert Whether the object needs inserting in the datastore with this value
-     * @param forUpdate Whether to update the datastore with this value
      */
-    public void initialise(com.google.common.collect.Multiset c, boolean forInsert, boolean forUpdate)
+    public void initialise(com.google.common.collect.Multiset c)
     {
         if (c != null)
         {
@@ -134,35 +167,12 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                 isCacheLoaded = true;
             }
 
-            if (forInsert)
+            if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
-                if (NucleusLogger.PERSISTENCE.isDebugEnabled())
-                {
-                    NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", 
-                        ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
-                }
-                addAll(c);
+                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
             }
-            else if (forUpdate)
-            {
-                if (NucleusLogger.PERSISTENCE.isDebugEnabled())
-                {
-                    NucleusLogger.PERSISTENCE.debug(Localiser.msg("023008", 
-                        ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
-                }
-                clear();
-                addAll(c);
-            }
-            else
-            {
-                if (NucleusLogger.PERSISTENCE.isDebugEnabled())
-                {
-                    NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", 
-                        ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
-                }
-                delegate.clear();
-                delegate.addAll(c);
-            }
+            delegate.clear();
+            delegate.addAll(c);
         }
     }
 
