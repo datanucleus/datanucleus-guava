@@ -21,7 +21,6 @@ import java.io.ObjectStreamException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.datanucleus.ClassLoaderResolver;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.exceptions.NucleusDataStoreException;
 import org.datanucleus.flush.CollectionAddOperation;
@@ -82,23 +81,18 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
         // Set up our delegate
         this.delegate = HashMultiset.create();
+        this.allowNulls = SCOUtils.allowNullsInContainer(allowNulls, ownerMmd);
+        this.useCache = SCOUtils.useContainerCache(op, ownerMmd);
 
-        if (op != null)
+        if (!SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getPersistenceModifier() == FieldPersistenceModifier.PERSISTENT)
         {
-            ExecutionContext ec = op.getExecutionContext();
-            allowNulls = SCOUtils.allowNullsInContainer(allowNulls, ownerMmd);
-            useCache = SCOUtils.useContainerCache(op, ownerMmd);
+            this.backingStore = (CollectionStore)((BackedSCOStoreManager)ownerOP.getStoreManager()).getBackingStoreForField(op.getExecutionContext().getClassLoaderResolver(), 
+                mmd, java.util.HashSet.class);
+        }
 
-            if (!SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getPersistenceModifier() == FieldPersistenceModifier.PERSISTENT)
-            {
-                ClassLoaderResolver clr = ec.getClassLoaderResolver();
-                this.backingStore = (CollectionStore)((BackedSCOStoreManager)ec.getStoreManager()).getBackingStoreForField(clr, ownerMmd, java.util.HashSet.class);
-            }
-            if (NucleusLogger.PERSISTENCE.isDebugEnabled())
-            {
-                NucleusLogger.PERSISTENCE.debug(SCOUtils.getContainerInfoMessage(op, ownerMmd.getName(), this,
-                    useCache, allowNulls, SCOUtils.useCachedLazyLoading(op, ownerMmd)));
-            }
+        if (NucleusLogger.PERSISTENCE.isDebugEnabled())
+        {
+            NucleusLogger.PERSISTENCE.debug(SCOUtils.getContainerInfoMessage(op, ownerMmd.getName(), this, useCache, allowNulls, SCOUtils.useCachedLazyLoading(op, ownerMmd)));
         }
     }
 
@@ -132,8 +126,52 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             {
                 NucleusLogger.PERSISTENCE.debug(Localiser.msg("023008", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + newValue.size()));
             }
-            clear();
-            addAll(newValue);
+
+            // Detect which objects are added and which are deleted
+            if (useCache)
+            {
+                Collection oldColl = (Collection)oldValue;
+                if (oldColl != null)
+                {
+                    delegate.addAll(oldColl);
+                }
+                isCacheLoaded = true;
+
+                for (Object elem : newValue)
+                {
+                    if (!delegate.contains(elem))
+                    {
+                        add((E) elem);
+                    }
+                }
+                java.util.HashSet delegateCopy = new java.util.HashSet(delegate);
+                for (Object elem : delegateCopy)
+                {
+                    if (!newValue.contains(elem))
+                    {
+                        remove(elem);
+                    }
+                }
+            }
+            else
+            {
+                for (Object elem : newValue)
+                {
+                    if (!contains(elem))
+                    {
+                        add((E) elem);
+                    }
+                }
+                Iterator iter = iterator();
+                while (iter.hasNext())
+                {
+                    Object elem = iter.next();
+                    if (!newValue.contains(elem))
+                    {
+                        remove(elem);
+                    }
+                }
+            }
         }
     }
 
@@ -161,18 +199,13 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                 }
             }
 
-            if (backingStore != null && useCache && !isCacheLoaded)
-            {
-                // Mark as loaded
-                isCacheLoaded = true;
-            }
-
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
                 NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
             }
-            delegate.clear();
+
             delegate.addAll(c);
+            isCacheLoaded = true;
         }
     }
 
