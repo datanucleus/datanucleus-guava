@@ -45,7 +45,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     protected transient AbstractMemberMetaData ownerMmd;
 
     /** The internal "delegate". */
-    protected HashMultiset<E> delegate;
+    protected com.google.common.collect.Multiset<E> delegate;
 
     /**
      * Constructor, using the ObjectProvider of the "owner" and the member.
@@ -112,6 +112,11 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public com.google.common.collect.Multiset getValue()
     {
         return delegate;
+    }
+
+    public void setValue(com.google.common.collect.Multiset value)
+    {
+        this.delegate = value;
     }
 
     /**
