@@ -39,7 +39,7 @@ import com.google.common.collect.HashMultiset;
  * This is the simplified form that intercepts mutators and marks the field as dirty.
  * Note that we cannot explicitly support HashMultiset etc since Google made these final.
  */
-public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset>, Cloneable
+public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset, E>, Cloneable
 {
     protected transient ObjectProvider ownerOP;
     protected transient AbstractMemberMetaData ownerMmd;
