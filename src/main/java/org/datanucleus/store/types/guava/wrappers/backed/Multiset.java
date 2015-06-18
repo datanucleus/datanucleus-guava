@@ -65,7 +65,7 @@ import com.google.common.collect.HashMultiset;
  */
 public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Multiset<E> implements BackedSCO
 {
-    protected transient CollectionStore backingStore;
+    protected transient CollectionStore<E> backingStore;
     protected transient boolean allowNulls = false;
     protected transient boolean useCache = true;
     protected transient boolean isCacheLoaded = false;
@@ -288,7 +288,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * @param value New value for this field
      * @param makeDirty Whether to make the SCO field dirty.
      */
-    public void updateEmbeddedElement(Object element, int fieldNumber, Object value, boolean makeDirty)
+    public void updateEmbeddedElement(E element, int fieldNumber, Object value, boolean makeDirty)
     {
         if (backingStore != null)
         {
@@ -383,11 +383,6 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         return super.count(element);
     }
 
-    /**
-     * Equality operator.
-     * @param o The object to compare against.
-     * @return Whether this object is the same.
-     */
     public synchronized boolean equals(Object o)
     {
         if (useCache)
@@ -397,10 +392,6 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         return super.equals(o);
     }
 
-    /**
-     * Hashcode operator.
-     * @return The Hash code.
-     */
     public synchronized int hashCode()
     {
         if (useCache)
@@ -423,7 +414,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * Accessor for an iterator for the Set.
      * @return The iterator
      **/
-    public Iterator iterator()
+    public Iterator<E> iterator()
     {
         // Populate the cache if necessary
         if (useCache)

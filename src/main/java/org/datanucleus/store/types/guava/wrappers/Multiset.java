@@ -39,7 +39,7 @@ import com.google.common.collect.HashMultiset;
  * This is the simplified form that intercepts mutators and marks the field as dirty.
  * Note that we cannot explicitly support HashMultiset etc since Google made these final.
  */
-public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset, E>, Cloneable
+public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset<E>, E>, Cloneable
 {
     protected transient ObjectProvider ownerOP;
     protected transient AbstractMemberMetaData ownerMmd;
@@ -109,12 +109,12 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      * Accessor for the unwrapped value that we are wrapping.
      * @return The unwrapped value
      */
-    public com.google.common.collect.Multiset getValue()
+    public com.google.common.collect.Multiset<E> getValue()
     {
         return delegate;
     }
 
-    public void setValue(com.google.common.collect.Multiset value)
+    public void setValue(com.google.common.collect.Multiset<E> value)
     {
         this.delegate = value;
     }
@@ -144,7 +144,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      * @param value New value for this field
      * @param makeDirty Whether to make the SCO field dirty.
      */
-    public void updateEmbeddedElement(Object element, int fieldNumber, Object value, boolean makeDirty)
+    public void updateEmbeddedElement(E element, int fieldNumber, Object value, boolean makeDirty)
     {
         if (makeDirty)
         {
@@ -466,7 +466,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     }
 
     @Override
-    protected com.google.common.collect.Multiset delegate()
+    protected com.google.common.collect.Multiset<E> delegate()
     {
         return delegate;
     }
