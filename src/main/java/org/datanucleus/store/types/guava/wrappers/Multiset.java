@@ -58,7 +58,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         this.ownerMmd = mmd;
     }
 
-    public void initialise(com.google.common.collect.Multiset newValue, Object oldValue)
+    public void initialise(com.google.common.collect.Multiset<E> newValue, Object oldValue)
     {
         delegate = HashMultiset.create();
         if (newValue != null)
@@ -76,7 +76,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      * Method to initialise the SCO from an existing value.
      * @param c The object to set from
      */
-    public void initialise(com.google.common.collect.Multiset c)
+    public void initialise(com.google.common.collect.Multiset<E> c)
     {
         delegate = HashMultiset.create();
         if (c != null)

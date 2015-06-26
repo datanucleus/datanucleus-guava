@@ -96,7 +96,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
     }
 
-    public void initialise(com.google.common.collect.Multiset newValue, Object oldValue)
+    public void initialise(com.google.common.collect.Multiset<E> newValue, Object oldValue)
     {
         if (newValue != null)
         {
@@ -165,7 +165,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * Method to initialise the SCO from an existing value.
      * @param c The object to set from
      */
-    public void initialise(com.google.common.collect.Multiset c)
+    public void initialise(com.google.common.collect.Multiset<E> c)
     {
         if (c != null)
         {
@@ -173,10 +173,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
             {
                 ExecutionContext ec = ownerOP.getExecutionContext();
-                Iterator iter = c.iterator();
+                Iterator<E> iter = c.iterator();
                 while (iter.hasNext())
                 {
-                    Object pc = iter.next();
+                    E pc = iter.next();
                     ObjectProvider objSM = ec.findObjectProvider(pc);
                     if (objSM == null)
                     {
@@ -213,7 +213,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      * Accessor for the unwrapped value that we are wrapping.
      * @return The unwrapped value
      */
-    public com.google.common.collect.Multiset getValue()
+    public com.google.common.collect.Multiset<E> getValue()
     {
         loadFromStore();
         return super.getValue();
