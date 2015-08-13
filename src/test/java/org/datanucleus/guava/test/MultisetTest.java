@@ -20,7 +20,6 @@ public class MultisetTest
     @Test
     public void testPersist()
     {
-        NucleusLogger.GENERAL.info(">> test START");
         PersistenceManagerFactory pmf = JDOHelper.getPersistenceManagerFactory("GuavaTest");
 
         PersistenceManager pm = pmf.getPersistenceManager();
@@ -71,6 +70,5 @@ public class MultisetTest
         }
 
         pmf.close();
-        NucleusLogger.GENERAL.info(">> test END");
     }
 }
