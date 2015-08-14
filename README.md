@@ -15,7 +15,7 @@ __Issue Tracker__ : http://www.datanucleus.org/servlet/jira/browse/NUCGUAVA
 
 __RoadMap__ : http://issues.datanucleus.org/browse/NUCGUAVA?report=com.atlassian.jira.plugin.system.project:roadmap-panel
 
-__Javadocs__ : [3.2](http://www.datanucleus.org/javadocs/store.types.guava/3.2/)
+__Javadocs__ : [5.0](http://www.datanucleus.org/javadocs/store.types.guava/5.0/), [4.0](http://www.datanucleus.org/javadocs/store.types.guava/4.0/), [3.2](http://www.datanucleus.org/javadocs/store.types.guava/3.2/)
 
 __Download(Releases)__ : [Maven Central](http://central.maven.org/maven2/org/datanucleus/datanucleus-guava)
 
