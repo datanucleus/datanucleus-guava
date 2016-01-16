@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.datanucleus</groupId>
         <artifactId>datanucleus-maven-parent</artifactId>
-        <version>4.0.5</version>
+        <version>5.0.0</version>
     </parent>
 
     <artifactId>datanucleus-guava</artifactId>
@@ -23,7 +23,7 @@
 
     <properties>
         <dn.version>5.0.0-m1-SNAPSHOT</dn.version>
-        <jdo.version>3.2.0-m1</jdo.version>
+        <jdo.version>3.2.0-m3</jdo.version>
     </properties>
 
     <build>
