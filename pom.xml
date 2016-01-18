@@ -57,7 +57,7 @@
 					<dependency>
 						<groupId>org.datanucleus</groupId>
 						<artifactId>datanucleus-api-jdo</artifactId>
-						<version>[${dn.version},)</version>
+						<version>[${dn.api.jdo.version},)</version>
 					</dependency>
 				</dependencies>
             </plugin>
@@ -68,7 +68,7 @@
                     <instructions>
                         <Bundle-SymbolicName>org.datanucleus.store.types.guava;singleton:=true</Bundle-SymbolicName>
                         <Import-Package>
-                            org.datanucleus*;version="${dn.version}",
+                            org.datanucleus*;version="${dn.core.version}",
                             *;resolution:=optional
                         </Import-Package>
                     </instructions>
