@@ -25,15 +25,15 @@
         <dn.core.version>5.0.0-m1</dn.core.version>
         <dn.api.jdo.version>5.0.0-m1</dn.api.jdo.version>
         <dn.rdbms.version>5.0.0-m1</dn.rdbms.version>
-        <jdo.version>3.2.0-m3</jdo.version>
+        <jdo.version>3.2.0-m5</jdo.version>
     </properties>
 
     <build>
         <plugins>
-        	<plugin>
+            <plugin>
                 <groupId>org.datanucleus</groupId>
                 <artifactId>datanucleus-maven-plugin</artifactId>
-                <version>4.0.1</version>
+                <version>5.0.0-release</version>
                 <configuration>
                     <api>JDO</api>
                     <fork>false</fork>
@@ -49,17 +49,17 @@
                     </execution>
                 </executions>
                 <dependencies>
-                	<dependency>
-			            <groupId>org.datanucleus</groupId>
-			            <artifactId>javax.jdo</artifactId>
-			            <version>[${jdo.version}, )</version>
-			        </dependency>
-					<dependency>
-						<groupId>org.datanucleus</groupId>
-						<artifactId>datanucleus-api-jdo</artifactId>
-						<version>[${dn.api.jdo.version},)</version>
-					</dependency>
-				</dependencies>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>javax.jdo</artifactId>
+                        <version>[${jdo.version}, )</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-api-jdo</artifactId>
+                        <version>[${dn.api.jdo.version},)</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
