@@ -21,8 +21,8 @@ import java.io.ObjectStreamException;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.datanucleus.FetchPlanState;
 import org.datanucleus.metadata.AbstractMemberMetaData;
-import org.datanucleus.state.FetchPlanState;
 import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.types.SCOCollection;
