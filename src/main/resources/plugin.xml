@@ -29,6 +29,8 @@ Contributors:
     <!-- RDBMS : JAVA TYPES MAPPING -->
     <extension point="org.datanucleus.store.rdbms.java_mapping">
         <mapping java-type="com.google.common.collect.Multiset" mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
+
+        <!-- TODO Remove this. Likely not needed now -->
         <mapping java-type="org.datanucleus.store.types.backed.Multiset" mapping-class="org.datanucleus.store.rdbms.mapping.java.CollectionMapping"/>
     </extension>
 </plugin>
