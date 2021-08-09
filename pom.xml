@@ -25,7 +25,7 @@
         <dn.core.version>5.9</dn.core.version>
         <dn.api.jdo.version>5.9</dn.api.jdo.version>
         <dn.rdbms.version>5.9</dn.rdbms.version>
-        <jdo.version>3.2.0-m13</jdo.version>
+        <jdo.version>3.2.0-release</jdo.version>
     </properties>
 
     <build>
