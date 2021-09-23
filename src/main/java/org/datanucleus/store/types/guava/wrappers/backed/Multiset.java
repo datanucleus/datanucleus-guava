@@ -72,27 +72,27 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
     /**
      * Constructor, using the ObjectProvider of the "owner" and the field name.
-     * @param op The owner ObjectProvider
+     * @param sm The owner ObjectProvider
      * @param mmd Metadata for the member
      */
-    public Multiset(ObjectProvider op, AbstractMemberMetaData mmd)
+    public Multiset(ObjectProvider sm, AbstractMemberMetaData mmd)
     {
-        super(op, mmd);
+        super(sm, mmd);
 
         // Set up our delegate
         this.delegate = HashMultiset.create();
         this.allowNulls = SCOUtils.allowNullsInContainer(allowNulls, ownerMmd);
-        this.useCache = SCOUtils.useContainerCache(op, ownerMmd);
+        this.useCache = SCOUtils.useContainerCache(sm, ownerMmd);
 
         if (!SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getPersistenceModifier() == FieldPersistenceModifier.PERSISTENT)
         {
-            this.backingStore = (CollectionStore)((BackedSCOStoreManager)ownerOP.getStoreManager()).getBackingStoreForField(op.getExecutionContext().getClassLoaderResolver(), 
+            this.backingStore = (CollectionStore)((BackedSCOStoreManager)ownerSM.getStoreManager()).getBackingStoreForField(sm.getExecutionContext().getClassLoaderResolver(), 
                 mmd, java.util.HashSet.class);
         }
 
         if (NucleusLogger.PERSISTENCE.isDebugEnabled())
         {
-            NucleusLogger.PERSISTENCE.debug(SCOUtils.getContainerInfoMessage(op, ownerMmd.getName(), this, useCache, allowNulls, SCOUtils.useCachedLazyLoading(op, ownerMmd)));
+            NucleusLogger.PERSISTENCE.debug(SCOUtils.getContainerInfoMessage(sm, ownerMmd.getName(), this, useCache, allowNulls, SCOUtils.useCachedLazyLoading(sm, ownerMmd)));
         }
     }
 
@@ -103,7 +103,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
             if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
             {
-                ExecutionContext ec = ownerOP.getExecutionContext();
+                ExecutionContext ec = ownerSM.getExecutionContext();
                 Iterator iter = newValue.iterator();
                 while (iter.hasNext())
                 {
@@ -111,7 +111,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     ObjectProvider objSM = ec.findObjectProvider(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerOP, ownerMmd.getAbsoluteFieldNumber());
+                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
                     }
                 }
             }
@@ -124,7 +124,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
-                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023008", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + newValue.size()));
+                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023008", ownerSM.getObjectAsPrintable(), ownerMmd.getName(), "" + newValue.size()));
             }
 
             // Detect which objects are added and which are deleted
@@ -137,7 +137,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                 }
                 isCacheLoaded = true;
 
-                SCOUtils.updateCollectionWithCollection(ownerOP.getExecutionContext().getApiAdapter(), this, newValue);
+                SCOUtils.updateCollectionWithCollection(ownerSM.getExecutionContext().getApiAdapter(), this, newValue);
             }
             else
             {
@@ -172,7 +172,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
             if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
             {
-                ExecutionContext ec = ownerOP.getExecutionContext();
+                ExecutionContext ec = ownerSM.getExecutionContext();
                 Iterator<E> iter = c.iterator();
                 while (iter.hasNext())
                 {
@@ -180,14 +180,14 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     ObjectProvider objSM = ec.findObjectProvider(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerOP, ownerMmd.getAbsoluteFieldNumber());
+                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
                     }
                 }
             }
 
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
-                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
+                NucleusLogger.PERSISTENCE.debug(Localiser.msg("023007", ownerSM.getObjectAsPrintable(), ownerMmd.getName(), "" + c.size()));
             }
 
             delegate.addAll(c);
@@ -200,7 +200,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      */
     public void initialise()
     {
-        if (useCache && !SCOUtils.useCachedLazyLoading(ownerOP, ownerMmd))
+        if (useCache && !SCOUtils.useCachedLazyLoading(ownerSM, ownerMmd))
         {
             // Load up the container now if not using lazy loading
             loadFromStore();
@@ -251,10 +251,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             if (NucleusLogger.PERSISTENCE.isDebugEnabled())
             {
                 NucleusLogger.PERSISTENCE.debug(Localiser.msg("023006", 
-                    ownerOP.getObjectAsPrintable(), ownerMmd.getName()));
+                    ownerSM.getObjectAsPrintable(), ownerMmd.getName()));
             }
             delegate.clear();
-            Iterator<? extends E> iter = backingStore.iterator(ownerOP);
+            Iterator<? extends E> iter = backingStore.iterator(ownerSM);
             while (iter.hasNext())
             {
                 delegate.add(iter.next());
@@ -278,7 +278,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
      */
     protected void addQueuedOperation(Operation oper)
     {
-        ownerOP.getExecutionContext().addOperationToQueue(oper);
+        ownerSM.getExecutionContext().addOperationToQueue(oper);
     }
 
     /**
@@ -292,7 +292,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
     {
         if (backingStore != null)
         {
-            backingStore.updateEmbeddedElement(ownerOP, element, fieldNumber, value);
+            backingStore.updateEmbeddedElement(ownerSM, element, fieldNumber, value);
         }
     }
 
@@ -339,7 +339,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
         else if (backingStore != null)
         {
-            return backingStore.contains(ownerOP,element);
+            return backingStore.contains(ownerSM,element);
         }
 
         return super.contains(element);
@@ -421,7 +421,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         {
             loadFromStore();
         }
-        return new SCOCollectionIterator(this, ownerOP, delegate, backingStore, useCache);
+        return new SCOCollectionIterator(this, ownerSM, delegate, backingStore, useCache);
     }
 
     /**
@@ -437,7 +437,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
         else if (backingStore != null)
         {
-            return backingStore.size(ownerOP);
+            return backingStore.size(ownerSM);
         }
 
         return super.size();
@@ -455,7 +455,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
         else if (backingStore != null)
         {
-            return SCOUtils.toArray(backingStore,ownerOP);
+            return SCOUtils.toArray(backingStore,ownerSM);
         }  
         return super.toArray();
     }
@@ -473,7 +473,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         }
         else if (backingStore != null)
         {
-            return SCOUtils.toArray(backingStore,ownerOP,a);
+            return SCOUtils.toArray(backingStore,ownerSM,a);
         }  
         return super.toArray(a);
     }
@@ -497,24 +497,24 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         {
             loadFromStore();
         }
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
         }
 
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerSM))
             {
-                addQueuedOperation(new CollectionAddOperation(ownerOP, backingStore, element));
+                addQueuedOperation(new CollectionAddOperation(ownerSM, backingStore, element));
             }
             else
             {
                 try
                 {
-                    backingSuccess = backingStore.add(ownerOP, element, (useCache ? delegate.size() : -1));
+                    backingSuccess = backingStore.add(ownerSM, element, (useCache ? delegate.size() : -1));
                 }
                 catch (NucleusDataStoreException dse)
                 {
@@ -544,11 +544,11 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             loadFromStore();
         }
 
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
             Iterator iter = c.iterator();
-            RelationshipManager relMgr = ownerOP.getExecutionContext().getRelationshipManager(ownerOP);
+            RelationshipManager relMgr = ownerSM.getExecutionContext().getRelationshipManager(ownerSM);
             while (iter.hasNext())
             {
                 relMgr.relationAdd(ownerMmd.getAbsoluteFieldNumber(), iter.next());
@@ -558,19 +558,19 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerSM))
             {
                 Iterator iter = c.iterator();
                 while (iter.hasNext())
                 {
-                    addQueuedOperation(new CollectionAddOperation(ownerOP, backingStore, iter.next()));
+                    addQueuedOperation(new CollectionAddOperation(ownerSM, backingStore, iter.next()));
                 }
             }
             else
             {
                 try
                 {
-                    backingSuccess = backingStore.addAll(ownerOP, c, (useCache ? delegate.size() : -1));
+                    backingSuccess = backingStore.addAll(ownerSM, c, (useCache ? delegate.size() : -1));
                 }
                 catch (NucleusDataStoreException dse)
                 {
@@ -597,13 +597,13 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerSM))
             {
-                addQueuedOperation(new CollectionClearOperation(ownerOP, backingStore));
+                addQueuedOperation(new CollectionClearOperation(ownerSM, backingStore));
             }
             else
             {
-                backingStore.clear(ownerOP);
+                backingStore.clear(ownerSM);
             }
         }
         delegate.clear();
@@ -636,27 +636,27 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
         int size = (useCache ? delegate.size() : -1);
         boolean contained = delegate.contains(element);
         boolean delegateSuccess = delegate.remove(element);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
         }
 
         boolean backingSuccess = true;
         if (backingStore != null)
         {
-            if (SCOUtils.useQueuedUpdate(ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerSM))
             {
                 backingSuccess = contained;
                 if (backingSuccess)
                 {
-                    addQueuedOperation(new CollectionRemoveOperation(ownerOP, backingStore, element, allowCascadeDelete));
+                    addQueuedOperation(new CollectionRemoveOperation(ownerSM, backingStore, element, allowCascadeDelete));
                 }
             }
             else
             {
                 try
                 {
-                    backingSuccess = backingStore.remove(ownerOP, element, size, allowCascadeDelete);
+                    backingSuccess = backingStore.remove(ownerSM, element, size, allowCascadeDelete);
                 }
                 catch (NucleusDataStoreException dse)
                 {
@@ -683,11 +683,11 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             loadFromStore();
         }
 
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
             Iterator iter = c.iterator();
-            RelationshipManager relMgr = ownerOP.getExecutionContext().getRelationshipManager(ownerOP);
+            RelationshipManager relMgr = ownerSM.getExecutionContext().getRelationshipManager(ownerSM);
             while (iter.hasNext())
             {
                 relMgr.relationRemove(ownerMmd.getAbsoluteFieldNumber(), iter.next());
@@ -699,7 +699,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             boolean backingSuccess = true;
             int size = (useCache ? delegate.size() : -1);
 
-            if (SCOUtils.useQueuedUpdate(ownerOP))
+            if (SCOUtils.useQueuedUpdate(ownerSM))
             {
                 backingSuccess = false;
                 Iterator iter = c.iterator();
@@ -709,7 +709,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     if (contains(element))
                     {
                         backingSuccess = true;
-                        addQueuedOperation(new CollectionRemoveOperation(ownerOP, backingStore, element, true));
+                        addQueuedOperation(new CollectionRemoveOperation(ownerSM, backingStore, element, true));
                     }
                 }
             }
@@ -717,7 +717,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
             {
                 try
                 {
-                    backingSuccess = backingStore.removeAll(ownerOP, c, size);
+                    backingSuccess = backingStore.removeAll(ownerSM, c, size);
                 }
                 catch (NucleusDataStoreException dse)
                 {

@@ -41,7 +41,7 @@ import com.google.common.collect.HashMultiset;
  */
 public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset<E>, E>, Cloneable
 {
-    protected transient ObjectProvider ownerOP;
+    protected transient ObjectProvider ownerSM;
     protected transient AbstractMemberMetaData ownerMmd;
 
     /** The internal "delegate". */
@@ -49,12 +49,12 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
 
     /**
      * Constructor, using the ObjectProvider of the "owner" and the member.
-     * @param op The owner ObjectProvider
+     * @param sm The owner ObjectProvider
      * @param mmd Metadata for the member.
      */
-    public Multiset(ObjectProvider op, AbstractMemberMetaData mmd)
+    public Multiset(ObjectProvider sm, AbstractMemberMetaData mmd)
     {
-        this.ownerOP = op;
+        this.ownerSM = sm;
         this.ownerMmd = mmd;
     }
 
@@ -67,7 +67,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         }
         if (NucleusLogger.PERSISTENCE.isDebugEnabled())
         {
-            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
+            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerSM.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
                 SCOUtils.getSCOWrapperOptionsMessage(true, false, true, false)));
         }
     }
@@ -85,7 +85,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         }
         if (NucleusLogger.PERSISTENCE.isDebugEnabled())
         {
-            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
+            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerSM.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
                 SCOUtils.getSCOWrapperOptionsMessage(true, false, true, false)));
         }
     }
@@ -98,7 +98,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         delegate = HashMultiset.create();
         if (NucleusLogger.PERSISTENCE.isDebugEnabled())
         {
-            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerOP.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
+            NucleusLogger.PERSISTENCE.debug(Localiser.msg("023003", this.getClass().getName(), ownerSM.getObjectAsPrintable(), ownerMmd.getName(), "" + size(), 
                 SCOUtils.getSCOWrapperOptionsMessage(true, false, true, false)));
         }
     }
@@ -168,7 +168,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      */
     public Object getOwner()
     {
-        return (ownerOP != null ? ownerOP.getObject() : null);
+        return (ownerSM != null ? ownerSM.getObject() : null);
     }
 
     /**
@@ -176,9 +176,9 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      */
     public synchronized void unsetOwner()
     {
-        if (ownerOP != null)
+        if (ownerSM != null)
         {
-            ownerOP = null;
+            ownerSM = null;
             ownerMmd = null;
         }
     }
@@ -188,9 +188,9 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      **/
     public void makeDirty()
     {
-        if (ownerOP != null)
+        if (ownerSM != null)
         {
-            ownerOP.makeDirty(ownerMmd.getAbsoluteFieldNumber());
+            ownerSM.makeDirty(ownerMmd.getAbsoluteFieldNumber());
         }
     }
 
@@ -203,7 +203,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public com.google.common.collect.Multiset detachCopy(FetchPlanState state)
     {
         com.google.common.collect.Multiset detached = HashMultiset.create();
-        SCOUtils.detachCopyForCollection(ownerOP, toArray(), state, detached);
+        SCOUtils.detachCopyForCollection(ownerSM, toArray(), state, detached);
         return detached;
     }
 
@@ -217,7 +217,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public void attachCopy(com.google.common.collect.Multiset value)
     {
         boolean elementsWithoutIdentity = SCOUtils.collectionHasElementsWithoutIdentity(ownerMmd);
-        SCOUtils.attachCopyElements(ownerOP, this, value, elementsWithoutIdentity);
+        SCOUtils.attachCopyElements(ownerSM, this, value, elementsWithoutIdentity);
 
 /*        // Remove any no-longer-needed elements from this collection
         SCOUtils.attachRemoveDeletedElements(ownerOP.getExecutionContext().getApiAdapter(), this, c, elementsWithoutIdentity);
@@ -249,7 +249,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
      */
     public Iterator iterator()
     {
-        return new SCOCollectionIterator(this, ownerOP, delegate, null, true);
+        return new SCOCollectionIterator(this, ownerSM, delegate, null, true);
     }
 
     /**
@@ -260,10 +260,10 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public boolean add(E element)
     {
         boolean success = delegate.add(element);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
         }
         if (success)
         {
@@ -285,10 +285,10 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
             throw new IllegalArgumentException("Number of occurrences is negative");
         }
         int origNum = delegate.add(element, num);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationAdd(ownerMmd.getAbsoluteFieldNumber(), element);
         }
         if (num > 0)
         {
@@ -305,11 +305,11 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public boolean addAll(Collection c)
     {
         boolean success = delegate.addAll(c);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
             Iterator iter = c.iterator();
-            RelationshipManager relMgr = ownerOP.getExecutionContext().getRelationshipManager(ownerOP);
+            RelationshipManager relMgr = ownerSM.getExecutionContext().getRelationshipManager(ownerSM);
             while (iter.hasNext())
             {
                 relMgr.relationAdd(ownerMmd.getAbsoluteFieldNumber(), iter.next());
@@ -354,9 +354,9 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
             throw new IllegalArgumentException("Number of occurrences is negative");
         }
         int numOrig = delegate.remove(element, num);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
         }
         if (num > 0)
         {
@@ -373,9 +373,9 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public synchronized boolean remove(Object element, boolean allowCascadeDelete)
     {
         boolean success = delegate.remove(element);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
-            ownerOP.getExecutionContext().getRelationshipManager(ownerOP).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
+            ownerSM.getExecutionContext().getRelationshipManager(ownerSM).relationRemove(ownerMmd.getAbsoluteFieldNumber(), element);
         }
         if (success)
         {
@@ -392,11 +392,11 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public boolean removeAll(java.util.Collection c)
     {
         boolean success = delegate.removeAll(c);
-        if (ownerOP != null && ownerOP.getExecutionContext().getManageRelations())
+        if (ownerSM != null && ownerSM.getExecutionContext().getManageRelations())
         {
             // Relationship management
             Iterator iter = c.iterator();
-            RelationshipManager relMgr = ownerOP.getExecutionContext().getRelationshipManager(ownerOP);
+            RelationshipManager relMgr = ownerSM.getExecutionContext().getRelationshipManager(ownerSM);
             while (iter.hasNext())
             {
                 relMgr.relationRemove(ownerMmd.getAbsoluteFieldNumber(), iter.next());
