@@ -48,7 +48,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     protected com.google.common.collect.Multiset<E> delegate;
 
     /**
-     * Constructor, using the ObjectProvider of the "owner" and the member.
+     * Constructor, using StateManager of the "owner" and the member.
      * @param sm The owner ObjectProvider
      * @param mmd Metadata for the member.
      */

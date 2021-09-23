@@ -71,7 +71,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
     protected transient boolean isCacheLoaded = false;
 
     /**
-     * Constructor, using the ObjectProvider of the "owner" and the field name.
+     * Constructor, using StateManager of the "owner" and the field name.
      * @param sm The owner ObjectProvider
      * @param mmd Metadata for the member
      */
