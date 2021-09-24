@@ -23,7 +23,7 @@ import java.util.Iterator;
 
 import org.datanucleus.FetchPlanState;
 import org.datanucleus.metadata.AbstractMemberMetaData;
-import org.datanucleus.state.ObjectProvider;
+import org.datanucleus.state.DNStateManager;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.types.SCOCollection;
 import org.datanucleus.store.types.SCOCollectionIterator;
@@ -41,7 +41,7 @@ import com.google.common.collect.HashMultiset;
  */
 public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<com.google.common.collect.Multiset<E>, E>, Cloneable
 {
-    protected transient ObjectProvider ownerSM;
+    protected transient DNStateManager ownerSM;
     protected transient AbstractMemberMetaData ownerMmd;
 
     /** The internal "delegate". */
@@ -49,10 +49,10 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
 
     /**
      * Constructor, using StateManager of the "owner" and the member.
-     * @param sm The owner ObjectProvider
+     * @param sm The owner StateManager
      * @param mmd Metadata for the member.
      */
-    public Multiset(ObjectProvider sm, AbstractMemberMetaData mmd)
+    public Multiset(DNStateManager sm, AbstractMemberMetaData mmd)
     {
         this.ownerSM = sm;
         this.ownerMmd = mmd;
@@ -220,15 +220,14 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
         SCOUtils.attachCopyElements(ownerSM, this, value, elementsWithoutIdentity);
 
 /*        // Remove any no-longer-needed elements from this collection
-        SCOUtils.attachRemoveDeletedElements(ownerOP.getExecutionContext().getApiAdapter(), this, c, elementsWithoutIdentity);
+        SCOUtils.attachRemoveDeletedElements(ownerSM.getExecutionContext().getApiAdapter(), this, c, elementsWithoutIdentity);
 
         // Persist any new elements and form the attached elements collection
         java.util.Collection attachedElements = new java.util.HashSet(c.size());
-        SCOUtils.attachCopyForCollection(ownerOP, c.toArray(), attachedElements, elementsWithoutIdentity);
+        SCOUtils.attachCopyForCollection(ownerSM, c.toArray(), attachedElements, elementsWithoutIdentity);
 
         // Add any new elements to this collection
-        SCOUtils.attachAddNewElements(ownerOP.getExecutionContext().getApiAdapter(), this, attachedElements,
-            elementsWithoutIdentity);*/
+        SCOUtils.attachAddNewElements(ownerSM.getExecutionContext().getApiAdapter(), this, attachedElements, elementsWithoutIdentity);*/
     }
 
     // ------------------ Implementation of methods --------------------

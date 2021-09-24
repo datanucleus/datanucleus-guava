@@ -29,7 +29,7 @@ import org.datanucleus.flush.CollectionRemoveOperation;
 import org.datanucleus.flush.Operation;
 import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.metadata.FieldPersistenceModifier;
-import org.datanucleus.state.ObjectProvider;
+import org.datanucleus.state.DNStateManager;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.BackedSCOStoreManager;
 import org.datanucleus.store.types.SCOCollectionIterator;
@@ -72,10 +72,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
 
     /**
      * Constructor, using StateManager of the "owner" and the field name.
-     * @param sm The owner ObjectProvider
+     * @param sm The owner StateManager
      * @param mmd Metadata for the member
      */
-    public Multiset(ObjectProvider sm, AbstractMemberMetaData mmd)
+    public Multiset(DNStateManager sm, AbstractMemberMetaData mmd)
     {
         super(sm, mmd);
 
@@ -100,7 +100,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
     {
         if (newValue != null)
         {
-            // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
+            // Check for the case of serialised PC elements, and assign StateManagers to the elements without
             if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
             {
                 ExecutionContext ec = ownerSM.getExecutionContext();
@@ -108,10 +108,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                 while (iter.hasNext())
                 {
                     Object pc = iter.next();
-                    ObjectProvider objSM = ec.findObjectProvider(pc);
+                    DNStateManager objSM = ec.findStateManager(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
+                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
                     }
                 }
             }
@@ -169,7 +169,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
     {
         if (c != null)
         {
-            // Check for the case of serialised PC elements, and assign ObjectProviders to the elements without
+            // Check for the case of serialised PC elements, and assign StateManagers to the elements without
             if (SCOUtils.collectionHasSerialisedElements(ownerMmd) && ownerMmd.getCollection().elementIsPersistent())
             {
                 ExecutionContext ec = ownerSM.getExecutionContext();
@@ -177,10 +177,10 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                 while (iter.hasNext())
                 {
                     E pc = iter.next();
-                    ObjectProvider objSM = ec.findObjectProvider(pc);
+                    DNStateManager objSM = ec.findStateManager(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getObjectProviderFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
+                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber());
                     }
                 }
             }
