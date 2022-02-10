@@ -203,7 +203,7 @@ public class Multiset<E> extends ForwardingMultiset<E> implements SCOCollection<
     public com.google.common.collect.Multiset detachCopy(FetchPlanState state)
     {
         com.google.common.collect.Multiset detached = HashMultiset.create();
-        SCOUtils.detachCopyForCollection(ownerSM, toArray(), state, detached);
+        SCOUtils.detachCopyForCollection(ownerSM.getExecutionContext(), toArray(), state, detached);
         return detached;
     }
 
