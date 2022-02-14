@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.datanucleus.ExecutionContext;
+import org.datanucleus.PersistableObjectType;
 import org.datanucleus.exceptions.NucleusDataStoreException;
 import org.datanucleus.flush.CollectionAddOperation;
 import org.datanucleus.flush.CollectionClearOperation;
@@ -29,7 +30,6 @@ import org.datanucleus.flush.CollectionRemoveOperation;
 import org.datanucleus.flush.Operation;
 import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.metadata.FieldPersistenceModifier;
-import org.datanucleus.metadata.MemberComponent;
 import org.datanucleus.state.DNStateManager;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.BackedSCOStoreManager;
@@ -113,7 +113,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     if (objSM == null)
                     {
                         objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false,
-                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), MemberComponent.COLLECTION_ELEMENT);
+                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), PersistableObjectType.EMBEDDED_COLLECTION_ELEMENT_PC);
                     }
                 }
             }
@@ -183,7 +183,7 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     if (objSM == null)
                     {
                         objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false,
-                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), MemberComponent.COLLECTION_ELEMENT);
+                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), PersistableObjectType.EMBEDDED_COLLECTION_ELEMENT_PC);
                     }
                 }
             }
