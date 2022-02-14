@@ -29,6 +29,7 @@ import org.datanucleus.flush.CollectionRemoveOperation;
 import org.datanucleus.flush.Operation;
 import org.datanucleus.metadata.AbstractMemberMetaData;
 import org.datanucleus.metadata.FieldPersistenceModifier;
+import org.datanucleus.metadata.MemberComponent;
 import org.datanucleus.state.DNStateManager;
 import org.datanucleus.state.RelationshipManager;
 import org.datanucleus.store.BackedSCOStoreManager;
@@ -111,7 +112,8 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     DNStateManager objSM = ec.findStateManager(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber(), null);
+                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false,
+                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), MemberComponent.COLLECTION_ELEMENT);
                     }
                 }
             }
@@ -180,7 +182,8 @@ public class Multiset<E> extends org.datanucleus.store.types.guava.wrappers.Mult
                     DNStateManager objSM = ec.findStateManager(pc);
                     if (objSM == null)
                     {
-                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false, ownerSM, ownerMmd.getAbsoluteFieldNumber(), null);
+                        objSM = ec.getNucleusContext().getStateManagerFactory().newForEmbedded(ec, pc, false,
+                            ownerSM, ownerMmd.getAbsoluteFieldNumber(), MemberComponent.COLLECTION_ELEMENT);
                     }
                 }
             }
